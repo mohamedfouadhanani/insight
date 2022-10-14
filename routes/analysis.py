@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, render_template, request
 from matplotlib import pyplot as plt
 import pandas as pd
 
-from dm.analysis import find_mean, find_median, find_modes, quartiles, find_outliers, summetry
+from dm.analysis import find_mean, find_median, find_modes, quartiles, find_outliers, symmetry, pearson_correlation
 
 import settings
 
@@ -42,8 +42,8 @@ def index_analysis(attribute):
         iqr = q3 - q1
 
         # compute symmetry
-        symmetry_dictionary = {0: "symmetric", 1: "skewed to the right", -1: "skewed to the left"}
-        attribute_symmetry_value = summetry(settings.dataset[attribute])
+        symmetry_dictionary = {0: "symmetric", 1: "skewed to the right", -1: "skewed to the left", -2: "undetermined"}
+        attribute_symmetry_value = symmetry(settings.dataset[attribute])
         attribute_symmetry = symmetry_dictionary[attribute_symmetry_value]
 
         # find outliers
@@ -61,6 +61,7 @@ def index_analysis(attribute):
             "q0": q0, "q1": q1, "q2": q2, "q3": q3, "q4": q4,
             "symmetry": attribute_symmetry,
             "iqr": iqr,
+            "unique": settings.dataset[attribute].nunique(),
             "modes": ", ".join([str(mode) for mode in modes])
         }
 
@@ -79,6 +80,9 @@ def index_analysis(attribute):
 @analysis_blueprint.route("/<string:attribute_1>/scatterplot", methods=["POST"])
 def scatter_plot_analysis(attribute_1):
     attribute_2 = request.form["attribute"]
+
+    correlation_coefficient = 0
+    show_correlation_coefficient = False
 
     X = settings.dataset[attribute_1]
     Y = settings.dataset[attribute_2]
@@ -101,15 +105,26 @@ def scatter_plot_analysis(attribute_1):
     plt.savefig("static/images/scatterplot.png")
     plt.close()
 
+    if settings.dataset[attribute_1].dtype != "object" and settings.dataset[attribute_2].dtype != "object":
+        correlation_coefficient = round(
+            pearson_correlation(
+                settings.dataset[attribute_1],
+                settings.dataset[attribute_2]),
+            2)
+        show_correlation_coefficient = True
+
     return render_template("analysis/scatterplot.html",
                            title=f"Attribute Analysis | Scatter Plot {attribute_1} of and {attribute_2}",
-                           attribute_1=attribute_1, attribute_2=attribute_2)
+                           attribute_1=attribute_1, attribute_2=attribute_2,
+                           correlation_coefficient=correlation_coefficient,
+                           show_correlation_coefficient=show_correlation_coefficient)
 
 
 @analysis_blueprint.route("/<string:attribute>/histogram", methods=["POST"])
 def histogram_analysis(attribute):
     n_bins = int(request.form["nbins"])
     plt.hist(settings.dataset[attribute], bins=n_bins)
+    plt.ylabel("Frequency")
     plt.savefig("static/images/histogram.png")
     plt.close()
 

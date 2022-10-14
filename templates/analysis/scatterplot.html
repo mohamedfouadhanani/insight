@@ -9,6 +9,9 @@
 			scatter plot of attributes
 			<span class="font-semibold">{{ attribute_1 }}</span> and
 			<span class="font-semibold">{{ attribute_2 }}</span>
+			{% if show_correlation_coefficient %} with
+			<span class="font-semibold"> {{ correlation_coefficient }} </span>
+			correlation coefficient. {% endif %}
 		</figcaption>
 	</figure>
 </section>
