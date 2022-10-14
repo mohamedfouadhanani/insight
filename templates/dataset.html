@@ -1,0 +1,98 @@
+{% extends 'layout.html' %} %} {% block main %}
+<main class="flex">
+	<section
+		class="overflow-y-scroll h-screen p-8 w-2/3 remove_scrollbar space-y-4"
+	>
+		<header>
+			<h1 class="font-bold text-xl capitalize">data visualization</h1>
+			<h2 class="font-semibold text-md capitalize text-gray-500">
+				The follwing is the data found within the uploaded file.
+			</h2>
+		</header>
+		<div class="overflow-y-scroll remove_scrollbar">
+			<table>
+				<thead>
+					{% for column in columns: %}
+					<th class="capitalize border-2 border-black p-2 underline">
+						<a href="/analysis/{{ column }}">{{ column.strip() }}</a>
+					</th>
+					{% endfor %}
+					<th class="capitalize border-2 border-black p-2">actions</th>
+				</thead>
+				<tbody>
+					{% for index, row in dataset.iterrows(): %}
+					<tr>
+						{% for column in columns: %}
+						<td class="border-2 border-black p-2">{{ row[column] }}</td>
+						{% endfor %}
+						<td class="border-2 border-black p-2">
+							<a href="/dataset/edit/{{index}}" class="text-blue-500 underline">
+								edit
+							</a>
+							or
+							<a
+								href="/dataset/delete/{{index}}"
+								class="text-blue-500 underline"
+							>
+								delete
+							</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<a
+			target="_blank"
+			href="/save"
+			class="text-center font-bold block capitalize p-2 w-full rounded-md text-white bg-gray-900 hover:bg-gray-800"
+		>
+			download current dataset
+		</a>
+	</section>
+	<section
+		class="text-sm overflow-y-scroll h-screen p-8 space-y-6 w-1/3 border-l-4 shadow-2xl border-black remove_scrollbar"
+	>
+		<section class="space-y-2">
+			<h1 class="capitalize font-bold text-xl">additional actions</h1>
+			<a
+				href="/drop"
+				class="text-center font-bold block capitalize p-2 w-full rounded-md text-white bg-gray-900 hover:bg-gray-800"
+			>
+				load another dataset
+			</a>
+		</section>
+		<!-- DESCRIBING THE DATASET -->
+		<section class="space-y-2">
+			<h1 class="capitalize font-bold text-xl">dataset description</h1>
+			<div>
+				The follwing dataset contains
+				<span class="font-bold">{{ samples }} sample(s)</span> and
+				<span class="font-bold">{{ attributes }} attributes</span>.
+			</div>
+		</section>
+		<!-- DESCRIBING THE ATTRIBUTES OF THE DATASET -->
+		<section class="space-y-2">
+			<h1 class="capitalize font-bold text-xl">
+				dataset attributes description
+			</h1>
+			<section class="space-y-2">
+				{% for column, dtype in dtypes.items() %}
+				<div>
+					<h3 class="font-semibold text-gray-900 capitalize text-md">
+						{{ column.strip() }}
+					</h3>
+					<span class="text-sm">
+						The attribute
+						<span class="font-bold">{{ column.strip() }}</span> is of type
+						<span class="font-bold">{{ dtype }}</span> with
+						<span class="font-bold">{{ dataset[column].nunique() }}</span>
+						unique values.
+					</span>
+				</div>
+				{% endfor %}
+			</section>
+		</section>
+	</section>
+</main>
+{% endblock %}

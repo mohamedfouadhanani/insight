@@ -1,0 +1,16 @@
+{% extends 'layout.html' %} {% block main %}
+<section class="h-screen grid content-center justify-items-center">
+	<figure>
+		<img
+			src="{{url_for('static',filename='images/scatterplot.png')}}"
+			alt="scatter plot of attributes {{ attribute_1 }} and {{ attribute_2 }}"
+		/>
+		<figcaption class="text-center capitalize font-light">
+			scatter plot of attributes
+			<span class="font-semibold">{{ attribute_1 }}</span> and
+			<span class="font-semibold">{{ attribute_2 }}</span>
+		</figcaption>
+	</figure>
+</section>
+
+{% endblock %}

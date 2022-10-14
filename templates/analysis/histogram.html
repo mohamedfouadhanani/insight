@@ -1,0 +1,13 @@
+{% extends 'layout.html' %} {% block main %}
+<section class="h-screen grid content-center justify-items-center">
+	<figure>
+		<img
+			src="{{url_for('static',filename='images/histogram.png')}}"
+			alt="histogram of attribute {{ attribute }}"
+		/>
+		<figcaption class="text-center capitalize font-light">
+			histogram of attribute <span class="font-semibold">{{ attribute }}</span>
+		</figcaption>
+	</figure>
+</section>
+{% endblock %}

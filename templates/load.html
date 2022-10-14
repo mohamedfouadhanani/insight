@@ -1,0 +1,40 @@
+{% extends 'layout.html' %} {% block main %}
+
+<main class="h-screen bg-gray-100 grid justify-items-center items-center">
+	<section
+		class="w-1/2 bg-white rounded-xl border-4 border-black p-8 space-y-2"
+	>
+		<h3 class="font-bold text-xl capitalize">loading a dataset</h3>
+		<form
+			enctype="multipart/form-data"
+			action="/load/"
+			method="post"
+			class="space-y-6"
+		>
+			<div class="space-y-2">
+				<div>
+					<label for="file" class="font-semibold text-lg block">File</label>
+					<span class="font-semibold text-gray-600 block text-sm">
+						Input a CSV or an XLSX file.
+					</span>
+				</div>
+				<input
+					id="file"
+					name="file"
+					type="file"
+					class="block"
+					accept=".csv, .xlsx"
+					required
+				/>
+			</div>
+
+			<button
+				class="uppercase font-bold w-full p-3 bg-black text-white hover:bg-gray-900 rounded-md"
+			>
+				ok
+			</button>
+		</form>
+	</section>
+</main>
+
+{% endblock %}

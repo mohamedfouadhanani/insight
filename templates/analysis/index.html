@@ -1,0 +1,183 @@
+{% extends 'layout.html' %} %} {% block main %}
+<main class="flex">
+	<section
+		class="overflow-y-scroll h-screen p-8 w-1/2 remove_scrollbar space-y-4"
+	>
+		<header>
+			<h1 class="font-bold text-xl capitalize">attribute analysis</h1>
+			<h2 class="font-semibold text-md capitalize text-gray-500">
+				the following is the analysis of the attribute
+				<span class="font-bold">{{ attribute }}</span>.
+			</h2>
+		</header>
+		<section class="overflow-y-scroll remove_scrollbar">
+			<article class="grid grid-cols-4 gap-4 capitalize">
+				{% for key, item in info.items() %} {% if key == "modes" %}
+				<div>
+					<h3 class="font-bold">{{ key }}</h3>
+					<span class="font-semibold text-sm text-gray-500">{{ item }}</span>
+				</div>
+				{% else %}
+				<div>
+					<h3 class="font-bold">{{ key }}</h3>
+					<span class="font-semibold text-sm text-gray-500">{{ item }}</span>
+				</div>
+				{% endif %} {% endfor %}
+			</article>
+		</section>
+		<section class="overflow-y-scroll remove_scrollbar space-y-2">
+			<h2 class="font-bold text-lg">Outliers</h2>
+			{% if outliers.shape[0] != 0 %}
+			<table>
+				<thead>
+					{% for column in columns: %}
+					<th class="capitalize border-2 border-black p-2 underline">
+						{{ column.strip() }}
+					</th>
+					{% endfor %}
+					<th class="capitalize border-2 border-black p-2">actions</th>
+				</thead>
+				<tbody>
+					{% for index, row in outliers.iterrows(): %}
+					<tr>
+						{% for column in columns: %}
+						<td class="border-2 border-black p-2">{{ row[column] }}</td>
+						{% endfor %}
+						<td class="border-2 border-black p-2">
+							<a
+								href="/dataset/delete/{{index}}"
+								class="text-blue-500 underline"
+							>
+								delete
+							</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% else %}
+			<span class="font-semibold text-gray-500 text-sm capitalize">
+				no outliers
+			</span>
+			{% endif %}
+		</section>
+		<section>
+			<h2 class="font-bold text-lg capitalize">boxplot</h2>
+			{% if show_boxplot %}
+			<figure>
+				<img
+					src="{{url_for('static',filename='images/boxplot.png')}}"
+					alt="boxplot of attribute {{ attribute }}"
+				/>
+				<figcaption class="text-center capitalize font-light">
+					boxplot of attribute
+					<span class="font-semibold">{{ attribute }}</span>
+				</figcaption>
+			</figure>
+			{% else %}
+			<span class="font-semibold text-gray-500 text-sm capitalize">
+				no boxplot
+			</span>
+			{% endif %}
+		</section>
+		<section>
+			<h2 class="font-bold text-lg capitalize">histogram</h2>
+			{% if show_histogram %}
+			<figure>
+				<img
+					src="{{url_for('static',filename='images/histogram.png')}}"
+					alt="histogram of attribute {{ attribute }}"
+				/>
+				<figcaption class="text-center capitalize font-light">
+					histogram of attribute
+					<span class="font-semibold">{{ attribute }}</span>
+				</figcaption>
+			</figure>
+			{% else %}
+			<span class="font-semibold text-gray-500 text-sm capitalize">
+				use the form on the right to determine the number of bins and display
+				the chart.
+			</span>
+			{% endif %}
+		</section>
+	</section>
+	<section
+		class="overflow-y-scroll h-screen p-8 space-y-6 w-1/2 border-l-4 border-black remove_scrollbar"
+	>
+		<article class="space-y-2">
+			<header class="capitalize">
+				<h3 class="font-bold">scatter plot</h3>
+				<span class="font-semibold text-sm text-gray-500">
+					pick with which attribute.
+				</span>
+			</header>
+			<main>
+				<form
+					target="_blank"
+					action="/analysis/{{ attribute }}/scatterplot"
+					method="post"
+					class="capitalize"
+				>
+					<div class="flex-col space-y-2">
+						<label class="block font-semibold" for="attribute">
+							attribute
+						</label>
+						<select
+							name="attribute"
+							id="attribute"
+							class="block w-full border-2 border-black p-2 rounded-select"
+						>
+							{% for column in columns %}
+							<option value="{{ column }}">{{ column.strip() }}</option>
+							{% endfor %}
+						</select>
+						<button
+							class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md"
+						>
+							ok
+						</button>
+					</div>
+				</form>
+			</main>
+		</article>
+
+		{% if not show_histogram %}
+		<article class="space-y-2">
+			<header class="capitalize">
+				<h3 class="font-bold">histogram</h3>
+				<span class="font-semibold text-sm text-gray-500">
+					pick the number of bins.
+				</span>
+			</header>
+			<main>
+				<form
+					target="_blank"
+					action="/analysis/{{ attribute }}/histogram"
+					method="post"
+					class="capitalize"
+				>
+					<div class="flex-col space-y-2">
+						<label class="block font-semibold" for="nbins">
+							number of bins
+						</label>
+						<input
+							class="w-full border-2 border-black p-2 rounded-select"
+							required
+							type="number"
+							name="nbins"
+							id="nbins"
+							min="1"
+						/>
+						<button
+							class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md"
+						>
+							ok
+						</button>
+					</div>
+				</form>
+			</main>
+		</article>
+		{% endif %}
+	</section>
+</main>
+{% endblock %}
