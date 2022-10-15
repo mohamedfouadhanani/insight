@@ -51,9 +51,10 @@ def post_edit_row(row_idx):
 
     for column in settings.dataset.columns:
         dtype = settings.dataset[column].dtype
-        # print(column, dtype)
+
         value = request.form[column]
         settings.dataset.at[row_idx, column] = value
+
         if dtype != "object":
             settings.dataset[column] = settings.dataset[column].astype(dtype)
 
