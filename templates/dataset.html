@@ -68,7 +68,10 @@
 			<div>
 				The follwing dataset contains
 				<span class="font-bold">{{ samples }} sample(s)</span> and
-				<span class="font-bold">{{ attributes }} attributes</span>.
+				<span class="font-bold">{{ attributes }} attribute(s)</span> and
+				<span class="font-bold"
+					>{{ dataset.isna().sum().sum() }} missing value(s)</span
+				>.
 			</div>
 		</section>
 		<!-- DESCRIBING THE ATTRIBUTES OF THE DATASET -->
@@ -79,7 +82,7 @@
 			<section class="space-y-2">
 				{% for column, dtype in dtypes.items() %}
 				<div>
-					<h3 class="font-semibold text-gray-900 capitalize text-md">
+					<h3 class="font-semibold text-gray-900 capitalize text-md underline">
 						{{ column.strip() }}
 					</h3>
 					<span class="text-sm">
@@ -87,7 +90,10 @@
 						<span class="font-bold">{{ column.strip() }}</span> is of type
 						<span class="font-bold">{{ dtype }}</span> with
 						<span class="font-bold">{{ dataset[column].nunique() }}</span>
-						unique values.
+						unique values and
+						<span class="font-bold">
+							{{ dataset[column].isna().sum() }} missing values.
+						</span>
 					</span>
 				</div>
 				{% endfor %}

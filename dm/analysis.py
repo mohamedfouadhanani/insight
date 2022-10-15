@@ -84,7 +84,7 @@ def symmetry(sequence):
 
     if sequence_mean < sequence_median < sequence_mode:
         return -1
-    
+
     return -2
 
 
@@ -156,5 +156,10 @@ def pearson_correlation(sequence_1, sequence_2):
 # plt.show()
 
 
-print("symmetry")
-print(symmetry(df["MonthlyIncome"]))
+# print("symmetry")
+# print(symmetry(df["MonthlyIncome"]))
+
+print(f"dataset has {df.isna().sum().sum()} missing values")
+
+for column in df.columns:
+    print(f"column {column} has {df[column].isna().sum()} missing values")
