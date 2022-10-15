@@ -42,7 +42,7 @@ def index_analysis(attribute):
         iqr = q3 - q1
 
         # compute symmetry
-        symmetry_dictionary = {0: "symmetric", 1: "skewed to the right", -1: "skewed to the left", -2: "undetermined"}
+        symmetry_dictionary = {0: "symmetric", 1: "positive", -1: "negative", -2: "undetermined"}
         attribute_symmetry_value = symmetry(settings.dataset[attribute])
         attribute_symmetry = symmetry_dictionary[attribute_symmetry_value]
 

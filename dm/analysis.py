@@ -112,7 +112,10 @@ def pearson_correlation(sequence_1, sequence_2):
 
     term_3 = (N - 1) * std_sequence_1 * std_sequence_2
 
-    return (term_1 - term_2) / term_3
+    try:
+        return (term_1 - term_2) / term_3
+    except Exception:
+        return 0
 
 
 # print("MonthlyIncome")
@@ -159,7 +162,9 @@ def pearson_correlation(sequence_1, sequence_2):
 # print("symmetry")
 # print(symmetry(df["MonthlyIncome"]))
 
-print(f"dataset has {df.isna().sum().sum()} missing values")
+# print(f"dataset has {df.isna().sum().sum()} missing values")
 
-for column in df.columns:
-    print(f"column {column} has {df[column].isna().sum()} missing values")
+# for column in df.columns:
+#     print(f"column {column} has {df[column].isna().sum()} missing values")
+
+print(df["StandardHours"])
