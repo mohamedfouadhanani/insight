@@ -167,4 +167,63 @@ def pearson_correlation(sequence_1, sequence_2):
 # for column in df.columns:
 #     print(f"column {column} has {df[column].isna().sum()} missing values")
 
-print(df["StandardHours"])
+# print(df["StandardHours"])
+
+# with open("resume.csv", "w") as file:
+#     file.write("attribut, mean, q0, q1, q2, q3, q4, symmetry, iqr, modes, n_outliers, n_unique, n_missing\n")
+#     for column in df.columns:
+#         if column == "EmployeeNumber":
+#             continue
+
+#         modes = find_modes(df[column])
+
+#         info = {
+#             "mean": "N/A",
+#             "q0": "N/A", "q1": "N/A", "q2": "N/A", "q3": "N/A", "q4": "N/A",
+#             "symmetry": "N/A",
+#             "iqr": "N/A",
+#             "modes": " & ".join([str(mode) for mode in modes]),
+#             "n_outliers": 0,
+#             "n_unique": 0,
+#             "n_missing": 0
+#         }
+
+#         if df[column].dtype != "object":
+#             mean = find_mean(df[column])
+
+#             # compute quartiles (q0 -> q4) & IQR
+#             q0, q1, q2, q3, q4 = quartiles(df[column])
+#             iqr = q3 - q1
+
+#             # compute symmetry
+#             symmetry_dictionary = {0: "symmetric", 1: "positive", -1: "negative", -2: "undetermined"}
+#             column_symmetry_value = symmetry(df[column])
+#             column_symmetry = symmetry_dictionary[column_symmetry_value]
+
+#             # find outliers
+#             outliers_indicies = find_outliers(df[column])
+#             n_outliers = len(outliers_indicies)
+
+#             # find n_unique
+#             n_unique = df[column].nunique()
+
+#             # find n_missing
+#             n_missing = df[column].isna().sum()
+
+#             info = {
+#                 "mean": mean,
+#                 "q0": q0, "q1": q1, "q2": q2, "q3": q3, "q4": q4,
+#                 "symmetry": column_symmetry,
+#                 "iqr": iqr,
+#                 "modes": " & ".join([str(mode) for mode in modes]),
+#                 "n_outliers": n_outliers,
+#                 "n_unique": n_unique,
+#                 "n_missing": n_missing
+#             }
+
+#             print(column)
+#             print(info)
+#             print()
+
+#             file.write(
+#                 f"{column}, {info['mean']}, {info['q0']}, {info['q1']}, {info['q2']}, {info['q3']}, {info['q4']}, {info['symmetry']}, {info['iqr']}, {info['modes']}, {info['n_outliers']}, {info['n_unique']}, {info['n_missing']}\n")

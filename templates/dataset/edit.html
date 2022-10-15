@@ -1,0 +1,47 @@
+{% extends 'layout.html' %} %} {% block main %}
+<section class="h-screen overflow-y-scroll remove_scrollbar">
+	<section class="p-12 space-y-4 w-2/4 mx-auto">
+		<header class="capitalize">
+			<h1 class="font-bold text-xl">editing sample at index {{ row_idx }}.</h1>
+			<h2 class="font-semibold text-gray-500">
+				in the following page you're editing the sample at index {{ row_idx }}
+				of the leaded dataset.
+			</h2>
+		</header>
+		<form method="post" action="/dataset/edit/{{ row_idx }}" class="space-y-4">
+			{% for column, dtype in dtypes.items() %}
+			<section class="space-y-2">
+				<label for="{{ column }}" class="font-bold text-lg">
+					{{ column.strip() }}
+				</label>
+				{% if dtype != "object" %}
+				<input
+					required
+					class="w-full border-2 border-black p-2 rounded-select"
+					type="number"
+					name="{{ column }}"
+					id="{{ column }}"
+					value="{{ sample[column] }}"
+				/>
+				{% else %}
+				<input
+					required
+					class="w-full border-2 border-black p-2 rounded-select"
+					type="text"
+					name="{{ column }}"
+					id="{{ column }}"
+					value="{{ sample[column] }}"
+				/>
+				{% endif %}
+			</section>
+			{% endfor %}
+			<button
+				class="uppercase font-bold w-full p-3 bg-black text-white hover:bg-gray-900 rounded-md"
+			>
+				ok
+			</button>
+		</form>
+	</section>
+</section>
+
+{% endblock %}
