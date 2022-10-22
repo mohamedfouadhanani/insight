@@ -1,4 +1,5 @@
 from flask import Blueprint, redirect, render_template, request
+from dm.analysis import attribute_type
 
 import settings
 
@@ -12,8 +13,10 @@ def index_dataset():
 
     m, n = settings.dataset.shape
 
-    dtypes = settings.dataset.dtypes.to_dict()
-    dtypes = {key: value if value != "object" else "string" for key, value in dtypes.items()}
+    # dtypes = settings.dataset.dtypes.to_dict()
+    # dtypes = {key: value if value != "object" else "string" for key, value in dtypes.items()}
+
+    dtypes = {column: " ".join(attribute_type(settings.dataset, column)) for column in settings.dataset.columns}
 
     return render_template(
         "dataset/index.html", title="Visualizing the dataset", samples=m, attributes=n, dtypes=dtypes,
@@ -58,4 +61,4 @@ def post_edit_row(row_idx):
         if dtype != "object":
             settings.dataset[column] = settings.dataset[column].astype(dtype)
 
-    return redirect("/dataset/")
+    return redirect(request.referrer)

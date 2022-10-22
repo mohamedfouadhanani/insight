@@ -2,16 +2,18 @@ from flask import Flask, redirect, make_response
 from routes.load import loading_blueprint
 from routes.dataset import dataset_blueprint
 from routes.analysis import analysis_blueprint
+from routes.pretreatment import pretreatment_blueprint
 
 import settings
 
-settings.init()
+settings.init_dev()
 
 app = Flask(__name__)
 
 app.register_blueprint(loading_blueprint, url_prefix="/load")
 app.register_blueprint(dataset_blueprint, url_prefix="/dataset")
 app.register_blueprint(analysis_blueprint, url_prefix="/analysis")
+app.register_blueprint(pretreatment_blueprint, url_prefix="/pretreatment")
 
 
 @app.route("/", methods=["GET"])

@@ -2,12 +2,12 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from collections import Counter
 import math
+import numpy as np
 
 with open("dataset.xlsx", "rb") as file:
     file_content = file.read()
 
 df = pd.read_excel(file_content)
-# print(df)
 
 
 def find_median(sequence):
@@ -77,15 +77,15 @@ def symmetry(sequence):
     sequence_mode = sequence_modes[0]
 
     if abs(sequence_median - sequence_mean) < epsilon and abs(sequence_median - sequence_mode) < epsilon:
-        return 0
+        return 0  # symetrique
 
     if sequence_mean > sequence_median > sequence_mode:
-        return 1
+        return 1  # symetrique positive
 
     if sequence_mean < sequence_median < sequence_mode:
-        return -1
+        return -1  # symetrique negative
 
-    return -2
+    return -2  # non-symetrique
 
 
 def pearson_correlation(sequence_1, sequence_2):
@@ -118,112 +118,147 @@ def pearson_correlation(sequence_1, sequence_2):
         return 0
 
 
-# print("MonthlyIncome")
-# print(df["MonthlyIncome"].dtype)
-# print(find_mean(df["MonthlyIncome"]))
+def chi2(sequence_1, sequence_2):
+    length_sequence_1 = len(sequence_1)
+    length_sequence_2 = len(sequence_2)
 
-# print(set([math.isnan(value) for value in df["MonthlyIncome"]]))
-# print(round(pearson_correlation(df["Age"], df["MonthlyRate"]), 2))
-# print(round(pearson_correlation(df["Age"], df["Age"]), 2))
-# print(round(pearson_correlation(df["MonthlyRate"], df["MonthlyRate"]), 2))
+    if length_sequence_1 != length_sequence_2:
+        raise ValueError("Sequences of different size")
 
-# q0, q1, q2, q3, q4 = quartiles([98, 90, 70, 18, 92, 92, 55, 83, 45, 95, 88, 76])
-# q0, q1, q2, q3, q4 = quartiles([98, 90, 70, 18, 92, 92, 55, 83, 45, 95, 88])
-# print(q0, q1, q2, q3, q4)
+    unique_sequence_1 = sorted(set(sequence_1))
+    unique_sequence_2 = sorted(set(sequence_2))
 
-# print(find_outliers([98, 90, 70, 18, 92, 92, 55, 83, 45, 95, 88, 76]))
-# print(find_outliers([98, 90, 70, 18, 92, 92, 55, 83, 45, 95, 88]))
+    n_unique_sequence_1 = len(unique_sequence_1)
+    n_unique_sequence_2 = len(unique_sequence_2)
 
-# n_bins = 4
-# plt.hist([98, 90, 70, 18, 92, 92, 55, 83, 45, 95, 88, 76], bins=n_bins)
-# plt.xlabel("Bins")
-# plt.ylabel("Frequency")
-# plt.title(f"Histogram of attribute")
-# plt.show()
+    matrix = np.zeros((n_unique_sequence_1, n_unique_sequence_2))
 
-# print(find_mode([1, 1, 2, 2, 1, 2, 2, 3, 3, 4, 3, 4, 4]))
-# print(find_mode([98, 90, 70, 18, 92, 92, 55, 83, 45, 95, 88]))
+    for element_sequence_1, element_sequence_2 in zip(sequence_1, sequence_2):
+        matrix[element_sequence_1, element_sequence_2] += 1
 
+    summation = 0
+    for i in range(matrix.shape[0]):
+        for j in range(matrix.shape[1]):
+            observed = matrix[i, j]
+            expected = (matrix[i].sum() * matrix[:, j].sum()) / matrix.sum()
+            summation += (observed - expected) ** 2 / expected
 
-# print(summetry([1, 1, 2, 2, 1, 2, 2, 3, 3, 4, 3, 4, 4]))
-
-# print(df["Attrition"].dtype)
-# print(df["DailyRate"].dtype)
-
-# print(df.iloc[[1, 2, 3]])
-
-# for row in df["Age"]:
-#     print(row)
-
-# plt.hist(df["Age"], bins=5)
-# plt.show()
+    return summation
 
 
-# print("symmetry")
-# print(symmetry(df["MonthlyIncome"]))
+def encode(sequence):
+    sequence_unique_values = set(sequence)
+    sequence_unique_values_dictionary = {value: index for index, value in enumerate(sequence_unique_values)}
+    encoding = [sequence_unique_values_dictionary[value] for value in sequence]
+    return encoding
 
-# print(f"dataset has {df.isna().sum().sum()} missing values")
 
-# for column in df.columns:
-#     print(f"column {column} has {df[column].isna().sum()} missing values")
+def attribute_type(dataset, attribute):
+    n_unique = dataset[attribute].nunique()
 
-# print(df["StandardHours"])
+    if n_unique > 9:
+        return ["continue"]
 
-# with open("resume.csv", "w") as file:
-#     file.write("attribut, mean, q0, q1, q2, q3, q4, symmetry, iqr, modes, n_outliers, n_unique, n_missing\n")
-#     for column in df.columns:
-#         if column == "EmployeeNumber":
-#             continue
+    if dataset[attribute].dtype == "object":
+        return ["discret", "nominal"]
 
-#         modes = find_modes(df[column])
+    return ["discret", "ordinal"]
 
-#         info = {
-#             "mean": "N/A",
-#             "q0": "N/A", "q1": "N/A", "q2": "N/A", "q3": "N/A", "q4": "N/A",
-#             "symmetry": "N/A",
-#             "iqr": "N/A",
-#             "modes": " & ".join([str(mode) for mode in modes]),
-#             "n_outliers": 0,
-#             "n_unique": 0,
-#             "n_missing": 0
-#         }
 
-#         if df[column].dtype != "object":
-#             mean = find_mean(df[column])
+if __name__ == "__main__":
+    # print(df.columns)
+    # encoded_attrition = encode(df["Attrition"])
+    # encoded_business_travel = encode(df["BusinessTravel"])
 
-#             # compute quartiles (q0 -> q4) & IQR
-#             q0, q1, q2, q3, q4 = quartiles(df[column])
-#             iqr = q3 - q1
+    # print(round(chi2(encoded_attrition, encoded_business_travel), 2))
 
-#             # compute symmetry
-#             symmetry_dictionary = {0: "symmetric", 1: "positive", -1: "negative", -2: "undetermined"}
-#             column_symmetry_value = symmetry(df[column])
-#             column_symmetry = symmetry_dictionary[column_symmetry_value]
+    # with open("resume.csv", "w") as file:
+    #     file.write("attribut, mean, q0, q1, q2, q3, q4, symmetry, iqr, modes, n_outliers, n_unique, n_missing\n")
+    #     for column in df.columns:
+    #         if column in ["EmployeeNumber"]:
+    #             continue
 
-#             # find outliers
-#             outliers_indicies = find_outliers(df[column])
-#             n_outliers = len(outliers_indicies)
+    #         modes = find_modes(df[column])
 
-#             # find n_unique
-#             n_unique = df[column].nunique()
+    #         info = {
+    #             "mean": "N/A",
+    #             "q0": "N/A", "q1": "N/A", "q2": "N/A", "q3": "N/A", "q4": "N/A",
+    #             "symmetry": "N/A",
+    #             "iqr": "N/A",
+    #             "modes": " & ".join([str(mode) for mode in modes]),
+    #             "n_outliers": 0,
+    #             "n_unique": 0,
+    #             "n_missing": 0
+    #         }
 
-#             # find n_missing
-#             n_missing = df[column].isna().sum()
+    #         if attribute_type(df[column]) == "continue":
+    #             mean = find_mean(df[column])
 
-#             info = {
-#                 "mean": mean,
-#                 "q0": q0, "q1": q1, "q2": q2, "q3": q3, "q4": q4,
-#                 "symmetry": column_symmetry,
-#                 "iqr": iqr,
-#                 "modes": " & ".join([str(mode) for mode in modes]),
-#                 "n_outliers": n_outliers,
-#                 "n_unique": n_unique,
-#                 "n_missing": n_missing
-#             }
+    #             # compute quartiles (q0 -> q4) & IQR
+    #             q0, q1, q2, q3, q4 = quartiles(df[column])
+    #             iqr = q3 - q1
 
-#             print(column)
-#             print(info)
-#             print()
+    #             # compute symmetry
+    #             symmetry_dictionary = {0: "symmetric",
+    #                                    1: "symmetric positive", -1: "symmetric negative", -2: "non-symmetric"}
+    #             column_symmetry_value = symmetry(df[column])
+    #             column_symmetry = symmetry_dictionary[column_symmetry_value]
 
-#             file.write(
-#                 f"{column}, {info['mean']}, {info['q0']}, {info['q1']}, {info['q2']}, {info['q3']}, {info['q4']}, {info['symmetry']}, {info['iqr']}, {info['modes']}, {info['n_outliers']}, {info['n_unique']}, {info['n_missing']}\n")
+    #             # find outliers
+    #             outliers_indicies = find_outliers(df[column])
+    #             n_outliers = len(outliers_indicies)
+
+    #             # find n_unique
+    #             n_unique = df[column].nunique()
+
+    #             # find n_missing
+    #             n_missing = df[column].isna().sum()
+
+    #             info = {
+    #                 "mean": mean,
+    #                 "q0": q0, "q1": q1, "q2": q2, "q3": q3, "q4": q4,
+    #                 "symmetry": column_symmetry,
+    #                 "iqr": iqr,
+    #                 "modes": " & ".join([str(mode) for mode in modes]),
+    #                 "n_outliers": n_outliers,
+    #                 "n_unique": n_unique,
+    #                 "n_missing": n_missing
+    #             }
+
+    #         file.write(
+    #             f"{column}, {info['mean']}, {info['q0']}, {info['q1']}, {info['q2']}, {info['q3']}, {info['q4']}, {info['symmetry']}, {info['iqr']}, {info['modes']}, {info['n_outliers']}, {info['n_unique']}, {info['n_missing']}\n")
+    # print(f"done with column {column}")
+
+    # with open("correlation.csv", "w") as file:
+    #     file.write("column_1, column_2, type, correlation, result\n")
+    #     for column_1 in df.columns:
+    #         for column_2 in df.columns:
+    #             if column_1 == column_2:
+    #                 continue
+
+    #             # continue continue
+    #             if attribute_type(df[column_1]) == "continue" and attribute_type(df[column_2]) == "continue":
+    #                 # compute pearson correlation coefficient
+    #                 correlation = round(pearson_correlation(df[column_1], df[column_2]), 2)
+
+    #                 result = "not-correlated"
+    #                 if abs(correlation) > 0.5:
+    #                     result = "correlated"
+
+    #                 file.write(f"{column_1}, {column_2}, continue, {correlation}, {result}\n")
+    #             # discret discret
+    #             if attribute_type(df[column_1]) == "discret" and attribute_type(df[column_2]) == "discret":
+    #                 # compute chi² correlation coefficient
+    #                 encoded_column_1 = encode(df[column_1])
+    #                 encoded_column_2 = encode(df[column_2])
+
+    #                 correlation = round(chi2(encoded_column_1, encoded_column_2), 2)
+
+    #                 result = "not-correlated"
+    #                 if abs(correlation) > 1_000:
+    #                     result = "correlated"
+
+    #                 file.write(f"{column_1}, {column_2}, discret, {correlation}, {result}\n")
+
+    print(df["EnvironmentSatisfaction"].nunique())
+    print(attribute_type(df["EnvironmentSatisfaction"]))

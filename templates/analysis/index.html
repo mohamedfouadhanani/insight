@@ -26,41 +26,115 @@
 			</article>
 		</section>
 		<section class="overflow-y-scroll remove_scrollbar space-y-2">
+			<h2 class="font-bold text-lg">Actions</h2>
+			<a
+				href="/pretreatment/{{ attribute }}/delete"
+				class="block w-full bg-gray-900 rounded-select p-2 text-center capitalize text-white hover:bg-gray-800 font-bold"
+			>
+				delete attribute
+			</a>
+		</section>
+		<!-- MISSING VALUES -->
+		<section class="space-y-2">
+			<h2 class="font-bold text-lg">Missing values</h2>
+			{% if missings.shape[0] != 0 %}
+			<div class="overflow-y-scroll remove_scrollbar">
+				<table>
+					<thead>
+						{% for column in columns: %}
+						<th class="capitalize border-2 border-black p-2">
+							{{ column.strip() }}
+						</th>
+						{% endfor %}
+						<th class="border-2 border-black p-2">actions</th>
+					</thead>
+					<tbody>
+						{% for index, row in missings.iterrows(): %}
+						<tr>
+							{% for column in columns: %}
+							<td class="border-2 border-black p-2">{{ row[column] }}</td>
+							{% endfor %}
+							<td class="border-2 border-black p-2">
+								<a
+									href="/dataset/delete/{{index}}"
+									class="text-blue-500 underline"
+								>
+									delete
+								</a>
+								or
+								<a
+									href="/dataset/edit/{{index}}"
+									class="text-blue-500 underline"
+								>
+									edit
+								</a>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			{% else %}
+			<span class="font-semibold text-gray-500 text-sm capitalize">
+				no missing values
+			</span>
+			{% endif %}
+		</section>
+		<!-- OUTLIERS -->
+		<section class="space-y-2">
 			<h2 class="font-bold text-lg">Outliers</h2>
 			{% if outliers.shape[0] != 0 %}
-			<table>
-				<thead>
-					{% for column in columns: %}
-					<th class="capitalize border-2 border-black p-2">
-						{{ column.strip() }}
-					</th>
-					{% endfor %}
-					<th class="capitalize border-2 border-black p-2">actions</th>
-				</thead>
-				<tbody>
-					{% for index, row in outliers.iterrows(): %}
-					<tr>
+			<div class="overflow-y-scroll remove_scrollbar">
+				<table>
+					<thead>
 						{% for column in columns: %}
-						<td class="border-2 border-black p-2">{{ row[column] }}</td>
+						<th class="capitalize border-2 border-black p-2">
+							{{ column.strip() }}
+						</th>
 						{% endfor %}
-						<td class="border-2 border-black p-2">
+						<th class="border-2 border-black p-2">
+							actions
 							<a
-								href="/dataset/delete/{{index}}"
-								class="text-blue-500 underline"
+								href="/pretreatment/{{ attribute }}/outliers/delete"
+								class="lowercase text-blue-500 underline text-sm"
 							>
-								delete
+								delete all
 							</a>
-						</td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+						</th>
+					</thead>
+					<tbody>
+						{% for index, row in outliers.iterrows(): %}
+						<tr>
+							{% for column in columns: %}
+							<td class="border-2 border-black p-2">{{ row[column] }}</td>
+							{% endfor %}
+							<td class="border-2 border-black p-2">
+								<a
+									href="/dataset/delete/{{index}}"
+									class="text-blue-500 underline"
+								>
+									delete
+								</a>
+								or
+								<a
+									href="/dataset/edit/{{index}}"
+									class="text-blue-500 underline"
+								>
+									edit
+								</a>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
 			{% else %}
 			<span class="font-semibold text-gray-500 text-sm capitalize">
 				no outliers
 			</span>
 			{% endif %}
 		</section>
+		<!-- BOXPLOT -->
 		<section>
 			<h2 class="font-bold text-lg capitalize">boxplot</h2>
 			{% if show_boxplot %}
@@ -102,7 +176,7 @@
 		</section>
 	</section>
 	<section
-		class="overflow-y-scroll h-screen p-8 space-y-6 w-1/2 border-l-4 border-black remove_scrollbar"
+		class="overflow-y-scroll h-screen p-8 space-y-8 w-1/2 border-l-4 border-black remove_scrollbar"
 	>
 		<article class="space-y-2">
 			<header class="capitalize">
@@ -116,7 +190,7 @@
 					target="_blank"
 					action="/analysis/{{ attribute }}/scatterplot"
 					method="post"
-					class="capitalize"
+					class="capitalize space-y-2"
 				>
 					<div class="flex-col space-y-2">
 						<label class="block font-semibold" for="attribute">
@@ -131,12 +205,12 @@
 							<option value="{{ column }}">{{ column.strip() }}</option>
 							{% endfor %}
 						</select>
-						<button
-							class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md"
-						>
-							ok
-						</button>
 					</div>
+					<button
+						class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md"
+					>
+						ok
+					</button>
 				</form>
 			</main>
 		</article>
@@ -154,7 +228,7 @@
 					target="_blank"
 					action="/analysis/{{ attribute }}/histogram"
 					method="post"
-					class="capitalize"
+					class="capitalize space-y-2"
 				>
 					<div class="flex-col space-y-2">
 						<label class="block font-semibold" for="nbins">
@@ -168,16 +242,113 @@
 							id="nbins"
 							min="1"
 						/>
-						<button
-							class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md"
-						>
-							ok
-						</button>
 					</div>
+					<button
+						class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md"
+					>
+						ok
+					</button>
+				</form>
+			</main>
+		</article>
+		{% endif %} {% if show_normalization %}
+		<article class="space-y-2">
+			<header class="capitalize">
+				<h3 class="font-bold">normalization</h3>
+				<span class="font-semibold text-sm text-gray-500">
+					pick a normalization method to apply on the attribute.
+				</span>
+			</header>
+			<main>
+				<form
+					action="/pretreatment/{{ attribute }}/normalization"
+					method="post"
+					class="capitalize space-y-2"
+				>
+					<div class="flex-col space-y-2">
+						<label class="block font-semibold" for="normalization">
+							normalization method
+						</label>
+						<select
+							name="normalization"
+							id="normalization"
+							class="block w-full border-2 border-black p-2 rounded-select"
+						>
+							<option value="zscore">Z-Score Normalization</option>
+							<option value="minmax">MinMax Normalization</option>
+						</select>
+					</div>
+					<div id="minimum_division" class="flex-col space-y-2 hidden">
+						<label class="block font-semibold" for="minimum">minimum</label>
+						<input
+							class="w-full border-2 border-black p-2 rounded-select"
+							required
+							value="0"
+							type="number"
+							name="minimum"
+							id="minimum"
+							min="0"
+						/>
+					</div>
+					<div id="maximum_division" class="flex-col space-y-2 hidden">
+						<label class="block font-semibold" for="maximum">maximum</label>
+						<input
+							class="w-full border-2 border-black p-2 rounded-select"
+							required
+							type="number"
+							name="maximum"
+							id="maximum"
+							min="0"
+							value="0"
+						/>
+					</div>
+					<input
+						type="submit"
+						value="ok"
+						class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md cursor-pointer"
+					/>
 				</form>
 			</main>
 		</article>
 		{% endif %}
+		<!-- MISSING VALUES REPLACEMENT -->
+		<article class="space-y-2">
+			<header class="capitalize">
+				<h3 class="font-bold">missing values replacement</h3>
+				<span class="font-semibold text-sm text-gray-500">
+					pick a method to use to replace missing values if they exist
+				</span>
+			</header>
+			<main>
+				<form
+					action="/pretreatment/{{ attribute }}/missing"
+					method="post"
+					class="capitalize space-y-2"
+				>
+					<div class="flex-col space-y-2">
+						<label class="block font-semibold" for="missing_values_replacement">
+							missing values replacement method
+						</label>
+						<select
+							name="missing_values_replacement"
+							id="missing_values_replacement"
+							class="block w-full border-2 border-black p-2 rounded-select"
+						>
+							{% for method in replacement_methods %}
+							<option value="{{ method }}" class="capitalize">
+								replace the missing values with the {{ method }}
+							</option>
+							{% endfor %}
+						</select>
+					</div>
+					<input
+						type="submit"
+						value="ok"
+						class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md cursor-pointer"
+					/>
+				</form>
+			</main>
+		</article>
 	</section>
 </main>
 {% endblock %}
