@@ -1,4 +1,4 @@
-from flask import Flask, redirect, make_response
+from flask import Flask, redirect, make_response, request
 from routes.load import loading_blueprint
 from routes.dataset import dataset_blueprint
 from routes.analysis import analysis_blueprint
@@ -33,6 +33,13 @@ def save():
     response.headers["Content-Disposition"] = "attachment; filename=export.csv"
     response.headers["Content-Type"] = "text/csv"
     return response
+
+
+@app.route("/reset", methods=["GET"])
+def reset():
+    settings.init_dev()
+
+    return redirect(request.referrer)
 
 
 if __name__ == "__main__":

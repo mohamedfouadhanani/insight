@@ -20,7 +20,7 @@ def index_dataset():
 
     return render_template(
         "dataset/index.html", title="Visualizing the dataset", samples=m, attributes=n, dtypes=dtypes,
-        dataset=settings.dataset, columns=settings.dataset.columns)
+        dataset=settings.dataset, columns=settings.dataset.columns, development=settings.development)
 
 
 @dataset_blueprint.route("/delete/<int:row_idx>", methods=["GET"])

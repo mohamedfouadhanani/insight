@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, request
 from dm.analysis import attribute_type, find_outliers
-from dm.pretreatment import fill_mean, fill_median, fill_mode, fill_unknown, min_max_normalization, z_score_normalization
+from dm.pretreatment import equal_intervals_discretization, fill_mean, fill_median, fill_minimum, fill_mode, fill_unknown, min_max_normalization, quantile_discretization, remove_outliers_equal_intervals_discretization, remove_outliers_quantile_discretization, z_score_normalization
 import settings
 
 pretreatment_blueprint = Blueprint("pretreatment", __name__)
@@ -75,11 +75,57 @@ def replace_missing_values(attribute):
         "mean": fill_mean,
         "median": fill_median,
         "mode": fill_mode,
-        "unknown": fill_unknown,
+        "minimum": fill_minimum,
+        "unknown": fill_unknown
     }
 
     try:
         method_functions[method](settings.dataset, attribute)
+    except:
+        pass
+
+    return redirect(request.referrer)
+
+
+@pretreatment_blueprint.route("/<string:attribute>/discretize", methods=["POST"])
+def discretize(attribute):
+    if settings.dataset is None:
+        return redirect("/load/")
+
+    if attribute not in settings.dataset.columns:
+        return redirect("/dataset/")
+
+    method = request.form["discretization"]
+    k = int(request.form["k"])
+
+    discretization_functions = {
+        "equal-frequency": quantile_discretization,
+        "equal-width": equal_intervals_discretization
+    }
+
+    try:
+        discretization_functions[method](dataset=settings.dataset, attribute=attribute, k=k)
+    except:
+        pass
+
+    return redirect(request.referrer)
+
+
+@pretreatment_blueprint.route("/<string:attribute>/outliers/delete", methods=["POST"])
+def discretize_outliers(attribute):
+
+    method = request.form["discretization"]
+    k = int(request.form["k"])
+
+    print(f"removing outliers by discretisizing them using the method {method} and k equal to {k}")
+
+    discretization_functions = {
+        "equal-frequency": remove_outliers_quantile_discretization,
+        "equal-width": remove_outliers_equal_intervals_discretization
+    }
+
+    try:
+        discretization_functions[method](dataset=settings.dataset, attribute=attribute, k=k)
     except:
         pass
 

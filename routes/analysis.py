@@ -24,7 +24,7 @@ def index_analysis(attribute):
     missings = settings.dataset.iloc[missing_indicies]
 
     # compute mean, median, modes
-    modes = find_modes(settings.dataset[attribute])
+    modes = find_modes(settings.dataset[settings.dataset[attribute].notna()][attribute])
 
     info = {
         "mean": "N/A",
@@ -32,6 +32,8 @@ def index_analysis(attribute):
         "q0": "N/A", "q1": "N/A", "q2": "N/A", "q3": "N/A", "q4": "N/A",
         "symmetry": "N/A",
         "iqr": "N/A",
+        "unique": settings.dataset[attribute].nunique(),
+        "type": " ".join(attribute_type(settings.dataset, attribute)),
         "modes": ", ".join([str(mode) for mode in modes])
     }
     outliers = pd.DataFrame()
@@ -39,6 +41,10 @@ def index_analysis(attribute):
     show_boxplot = False
     show_histogram = False
     show_normalization = False
+    show_discretization = False
+
+    # discretization methods
+    discretization_methods = ["equal-frequency", "equal-width"]
 
     attribute_types = attribute_type(dataset=settings.dataset, attribute=attribute)
 
@@ -49,28 +55,31 @@ def index_analysis(attribute):
         replacement_methods = ["mode"]
 
     if set(["continue"]).issubset(attribute_types):
-        replacement_methods = ["mean", "median", "mode"]
+        # discretization
+        show_discretization = True
+
+        replacement_methods = ["mean", "median", "mode", "minimum"]
 
         show_normalization = True
 
-        mean = find_mean(settings.dataset[attribute])
-        _, median = find_median(settings.dataset[attribute])
+        mean = find_mean(settings.dataset[settings.dataset[attribute].notna()][attribute])
+        _, median = find_median(settings.dataset[settings.dataset[attribute].notna()][attribute])
 
         # compute quartiles (q0 -> q4) & IQR
-        q0, q1, q2, q3, q4 = quartiles(settings.dataset[attribute])
+        q0, q1, q2, q3, q4 = quartiles(settings.dataset[settings.dataset[attribute].notna()][attribute])
         iqr = q3 - q1
 
         # compute symmetry
-        symmetry_dictionary = {0: "symmetric", 1: "symmetric positive", -1: "symmetric negative", -2: "non-symmetric"}
-        attribute_symmetry_value = symmetry(settings.dataset[attribute])
+        symmetry_dictionary = {0: "symmetric", 1: "asymmetric positive", -1: "asymmetric negative", -2: "non-symmetric"}
+        attribute_symmetry_value = symmetry(settings.dataset[settings.dataset[attribute].notna()][attribute])
         attribute_symmetry = symmetry_dictionary[attribute_symmetry_value]
 
         # find outliers
-        outliers_indicies = find_outliers(settings.dataset[attribute])
+        outliers_indicies = find_outliers(settings.dataset[settings.dataset[attribute].notna()][attribute])
         outliers = settings.dataset.iloc[outliers_indicies]
 
         # draw & save boxplot
-        plt.boxplot(settings.dataset[attribute])
+        plt.boxplot(settings.dataset[settings.dataset[attribute].notna()][attribute])
         plt.title(f"boxplot of attribute {attribute}")
         plt.savefig("static/images/boxplot.png")
         plt.close()
@@ -85,11 +94,13 @@ def index_analysis(attribute):
             "q4": round(q4, settings.round_to),
             "symmetry": attribute_symmetry, "iqr": round(iqr, settings.round_to),
             "unique": settings.dataset[attribute].nunique(),
+            "type": " ".join(attribute_type(settings.dataset, attribute)),
             "modes": ", ".join([str(round(mode, settings.round_to)) for mode in modes])}
 
         show_boxplot = True
     else:
         show_histogram = True
+
         plt.hist(settings.dataset[settings.dataset[attribute].notna()][attribute])
         plt.title(f"histogram of attribute {attribute}")
         plt.savefig("static/images/histogram.png")
@@ -98,7 +109,8 @@ def index_analysis(attribute):
     return render_template(
         "/analysis/index.html", title=f"Attribute Analysis | {attribute}", attribute=attribute, info=info,
         outliers=outliers, columns=settings.dataset.columns, show_boxplot=show_boxplot, show_histogram=show_histogram,
-        show_normalization=show_normalization, missings=missings, replacement_methods=replacement_methods)
+        show_normalization=show_normalization, missings=missings, replacement_methods=replacement_methods,
+        show_discretization=show_discretization, discretization_methods=discretization_methods)
 
 
 @ analysis_blueprint.route("/<string:attribute_1>/scatterplot", methods=["POST"])

@@ -349,6 +349,106 @@
 				</form>
 			</main>
 		</article>
+		<!-- DISCRETIZATION -->
+		{% if show_discretization %}
+		<article class="space-y-2">
+			<header class="capitalize">
+				<h3 class="font-bold">discretization</h3>
+				<span class="font-semibold text-sm text-gray-500">
+					pick a method to use to discretize the current sequence.
+				</span>
+			</header>
+			<main>
+				<form
+					action="/pretreatment/{{ attribute }}/discretize"
+					method="post"
+					class="capitalize space-y-2"
+				>
+					<div class="flex-col space-y-2">
+						<label class="block font-semibold" for="discretization">
+							discretization method
+						</label>
+						<select
+							name="discretization"
+							id="discretization"
+							class="block w-full border-2 border-black p-2 rounded-select"
+						>
+							{% for method in discretization_methods %}
+							<option value="{{ method }}" class="capitalize">
+								replace the missing values with the {{ method }}
+							</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div id="k" class="flex-col space-y-2">
+						<label class="block font-semibold" for="k">k</label>
+						<input
+							class="w-full border-2 border-black p-2 rounded-select"
+							required
+							type="number"
+							name="k"
+							id="k"
+							min="1"
+						/>
+					</div>
+					<input
+						type="submit"
+						value="ok"
+						class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md cursor-pointer"
+					/>
+				</form>
+			</main>
+		</article>
+		{% endif %} {% if show_discretization %}
+		<article class="space-y-2">
+			<header class="capitalize">
+				<h3 class="font-bold">outliers removal</h3>
+				<span class="font-semibold text-sm text-gray-500">
+					pick a discretization method to use to delete attribute outliers.
+				</span>
+			</header>
+			<main>
+				<form
+					action="/pretreatment/{{ attribute }}/outliers/delete"
+					method="post"
+					class="capitalize space-y-2"
+				>
+					<div class="flex-col space-y-2">
+						<label class="block font-semibold" for="discretization">
+							discretization method
+						</label>
+						<select
+							name="discretization"
+							id="discretization"
+							class="block w-full border-2 border-black p-2 rounded-select"
+						>
+							{% for method in discretization_methods %}
+							<option value="{{ method }}" class="capitalize">
+								replace the outlier values with the {{ method }}
+							</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div id="k" class="flex-col space-y-2">
+						<label class="block font-semibold" for="k">k</label>
+						<input
+							class="w-full border-2 border-black p-2 rounded-select"
+							required
+							type="number"
+							name="k"
+							id="k"
+							min="1"
+						/>
+					</div>
+					<input
+						type="submit"
+						value="ok"
+						class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md cursor-pointer"
+					/>
+				</form>
+			</main>
+		</article>
+		{% endif %}
 	</section>
 </main>
 {% endblock %}
