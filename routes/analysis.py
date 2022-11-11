@@ -20,8 +20,8 @@ def index_analysis(attribute):
         return redirect("/dataset/")
 
     # find missing values
-    missing_indicies = settings.dataset.index[settings.dataset[attribute].isnull()].tolist()
-    missings = settings.dataset.iloc[missing_indicies]
+    missing_indicies = settings.dataset.index[settings.dataset[attribute].isnull()]
+    missing_indicies_length = len(missing_indicies)
 
     # compute mean, median, modes
     modes = find_modes(settings.dataset[settings.dataset[attribute].notna()][attribute])
@@ -109,8 +109,8 @@ def index_analysis(attribute):
     return render_template(
         "/analysis/index.html", title=f"Attribute Analysis | {attribute}", attribute=attribute, info=info,
         outliers=outliers, columns=settings.dataset.columns, show_boxplot=show_boxplot, show_histogram=show_histogram,
-        show_normalization=show_normalization, missings=missings, replacement_methods=replacement_methods,
-        show_discretization=show_discretization, discretization_methods=discretization_methods)
+        show_normalization=show_normalization, missing_indicies=missing_indicies, missing_indicies_length=missing_indicies_length, replacement_methods=replacement_methods,
+        show_discretization=show_discretization, discretization_methods=discretization_methods, dataset=settings.dataset)
 
 
 @ analysis_blueprint.route("/<string:attribute_1>/scatterplot", methods=["POST"])

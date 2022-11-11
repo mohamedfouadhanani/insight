@@ -61,6 +61,8 @@ def find_mean(sequence):
 
 
 def find_modes(sequence):
+    if sequence.empty:
+        return []
     sequence_counter = Counter(sequence)
 
     _, maximum_frequency = sequence_counter.most_common(1)[0]

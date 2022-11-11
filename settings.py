@@ -9,6 +9,9 @@ def init():
     global dataset
     dataset = None
 
+    global round_to
+    round_to = 4
+
 
 def init_dev():
     global development
@@ -21,11 +24,6 @@ def init_dev():
 
     global dataset
     dataset = df
-
-    dataset.at[0, "Age"] = 2
-    dataset.at[5, "Age"] = 74
-    dataset.at[0, "Education"] = np.nan
-    dataset.at[0, "Department"] = np.nan
 
     global round_to
     round_to = 4

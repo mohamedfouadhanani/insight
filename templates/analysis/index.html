@@ -37,7 +37,7 @@
 		<!-- MISSING VALUES -->
 		<section class="space-y-2">
 			<h2 class="font-bold text-lg">Missing values</h2>
-			{% if missings.shape[0] != 0 %}
+			{% if missing_indicies_length != 0 %}
 			<div class="overflow-y-scroll remove_scrollbar">
 				<table>
 					<thead>
@@ -49,10 +49,12 @@
 						<th class="border-2 border-black p-2">actions</th>
 					</thead>
 					<tbody>
-						{% for index, row in missings.iterrows(): %}
+						{% for index in missing_indicies: %}
 						<tr>
 							{% for column in columns: %}
-							<td class="border-2 border-black p-2">{{ row[column] }}</td>
+							<td class="border-2 border-black p-2">
+								{{ dataset.iloc[index][column] }}
+							</td>
 							{% endfor %}
 							<td class="border-2 border-black p-2">
 								<a
@@ -409,7 +411,7 @@
 			</header>
 			<main>
 				<form
-					action="/pretreatment/{{ attribute }}/outliers/delete"
+					action="/pretreatment/{{ attribute }}/outliers/replace"
 					method="post"
 					class="capitalize space-y-2"
 				>

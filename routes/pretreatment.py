@@ -29,9 +29,9 @@ def delete_outliers(attribute):
 
     if "continue" in attribute_type(settings.dataset, attribute):
         outliers_indicies = find_outliers(settings.dataset[attribute])
-        settings.dataset.drop(outliers_indicies, inplace=True)
+        settings.dataset.drop(settings.dataset.index[outliers_indicies], inplace=True)
 
-    return redirect(f"/analysis/{attribute}")
+    return redirect(request.referrer)
 
 
 @pretreatment_blueprint.route("/<string:attribute>/normalization", methods=["POST"])
@@ -111,7 +111,7 @@ def discretize(attribute):
     return redirect(request.referrer)
 
 
-@pretreatment_blueprint.route("/<string:attribute>/outliers/delete", methods=["POST"])
+@pretreatment_blueprint.route("/<string:attribute>/outliers/replace", methods=["POST"])
 def discretize_outliers(attribute):
 
     method = request.form["discretization"]
