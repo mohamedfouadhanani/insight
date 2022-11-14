@@ -31,6 +31,7 @@ def post_load():
         data_string = file_content.decode("ascii")
         data = pd.read_csv(StringIO(data_string))
 
+    data = data.rename(columns=lambda x: x.strip())
     settings.dataset = data
     # set dataset variable
     return redirect("/dataset/")

@@ -29,7 +29,7 @@ def candidate_sets(transactions, minimum_support):
     while True:
         candidate_i = tuple()
         
-        for combination in combinations(items, k):           
+        for combination in combinations(items, k):   
             count = 0
             for _, itemset in transactions.items():
                 if itemset.issuperset(combination):
@@ -120,7 +120,7 @@ def apriori(transactions, minimum_support, minimum_confidence):
     # sorting rules by lift
     rules = sorted(rules, key=lambda rule: lift(transactions=transactions, item_1=rule[0], item_2=rule[1]), reverse=True)
 
-    return rules
+    return rules, candidates
 
 minimum_support = 3
 minimum_confidence = 0.8

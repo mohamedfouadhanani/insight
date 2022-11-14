@@ -1,0 +1,28 @@
+{% extends 'layout.html' %} %} {% block main %}
+<main class="w-2/3 mx-auto my-8 text-xl space-y-2">
+	<section class="space-y-2">
+		<h1 class="capitalize font-bold text-2xl">candidates</h1>
+		{% for k, candidate_i in candidates.items() %}
+		<h2 class="capitalize font-semibold text-lg text-gray-400">
+			length = {{ k }}
+		</h2>
+		{% for itemset in candidate_i %}
+		<div>
+			<!-- <div>{{ itemset }}</div> -->
+			{% for item in itemset %}
+			<span>{{ item }}; </span>
+			{% endfor %}
+		</div>
+		{% endfor %} {% endfor %}
+	</section>
+	<section class="space-y-2">
+		<h1 class="capitalize font-bold text-2xl">rules</h1>
+		{% for premise, consequence in rules %}
+		<div>
+			<span class="font-bold uppercase">if</span> {{ premise }}
+			<span class="font-bold uppercase">THEN</span> {{ consequence }}
+		</div>
+		{% endfor %}
+	</section>
+</main>
+{% endblock %}

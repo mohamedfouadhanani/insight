@@ -1,0 +1,126 @@
+{% extends 'layout.html' %} %} {% block main %}
+<section class="w-2/3 mx-auto my-8 space-y-6">
+	<section>
+		<h1 class="font-bold text-2xl capitalize">association rules</h1>
+		<form target="_blank" action="/apriori/" method="post" class="space-y-4">
+			<div class="flex-col space-y-2 capitalize">
+				<label class="block font-semibold" for="extraction_algorithm">
+					extraction algorithm
+				</label>
+				<select
+					required
+					name="extraction_algorithm"
+					id="extraction_algorithm"
+					class="block w-full border-2 border-black p-2 rounded-select"
+				>
+					{% for algorithm in extraction_algorithm %}
+					<option value="{{ algorithm }}" class="capitalize">
+						{{ algorithm }}
+					</option>
+					{% endfor %}
+				</select>
+			</div>
+			<div class="flex-col space-y-2 capitalize">
+				<label class="block font-semibold" for="minimum_support"
+					>minimum support</label
+				>
+				<input
+					class="w-full border-2 border-black p-2 rounded-select"
+					required
+					type="number"
+					name="minimum_support"
+					id="minimum_support"
+					value="10"
+					min="0"
+					max="100"
+					step="1"
+				/>
+			</div>
+			<div class="flex-col space-y-2 capitalize">
+				<label class="block font-semibold" for="minimum_confidence"
+					>minimum confidence</label
+				>
+				<input
+					class="w-full border-2 border-black p-2 rounded-select"
+					required
+					type="number"
+					name="minimum_confidence"
+					id="minimum_confidence"
+					value="50"
+					min="0"
+					max="100"
+					step="1"
+				/>
+			</div>
+			<input
+				type="submit"
+				value="ok"
+				class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md cursor-pointer"
+			/>
+		</form>
+	</section>
+	<section>
+		<h1 class="font-bold text-2xl capitalize">recommendation</h1>
+		<form
+			target="_blank"
+			action="/apriori/recommend"
+			method="post"
+			class="space-y-4"
+		>
+			<div class="flex-col space-y-2 capitalize">
+				<section>
+					<label class="block font-semibold" for="items"> items </label>
+					<span class="block font-semibold text-gray-400">
+						make sure to seperate using ;
+					</span>
+				</section>
+				<input
+					class="w-full border-2 border-black p-2 rounded-select"
+					required
+					type="text"
+					name="items"
+					id="items"
+					value="22, hd; 24, hd; 25, hd; 28, hd;"
+				/>
+			</div>
+			<div class="flex-col space-y-2 capitalize">
+				<label class="block font-semibold" for="minimum_support"
+					>minimum support</label
+				>
+				<input
+					class="w-full border-2 border-black p-2 rounded-select"
+					required
+					type="number"
+					name="minimum_support"
+					id="minimum_support"
+					value="10"
+					min="0"
+					max="100"
+					step="1"
+				/>
+			</div>
+			<div class="flex-col space-y-2 capitalize">
+				<label class="block font-semibold" for="minimum_confidence"
+					>minimum confidence</label
+				>
+				<input
+					class="w-full border-2 border-black p-2 rounded-select"
+					required
+					type="number"
+					name="minimum_confidence"
+					id="minimum_confidence"
+					value="50"
+					min="0"
+					max="100"
+					step="1"
+				/>
+			</div>
+			<input
+				type="submit"
+				value="ok"
+				class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md cursor-pointer"
+			/>
+		</form>
+	</section>
+</section>
+{% endblock %}

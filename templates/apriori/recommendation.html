@@ -1,0 +1,12 @@
+{% extends 'layout.html' %} %} {% block main %}
+<main class="w-2/3 mx-auto my-8 text-xl space-y-2">
+	<h1 class="capitalize font-bold text-2xl">recommendations</h1>
+	{% for categoryId, definition in recommendations %}
+	<div class="capitalize">
+		the system recommends to watch a video from the category id
+		<span class="font-bold">{{ categoryId }}</span>
+		with <span class="font-bold uppercase">{{ definition }}</span> definition
+	</div>
+	{% endfor %}
+</main>
+{% endblock %}

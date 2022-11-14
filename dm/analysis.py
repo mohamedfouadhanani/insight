@@ -158,109 +158,14 @@ def encode(sequence):
 def attribute_type(dataset, attribute):
     n_unique = dataset[attribute].nunique()
 
-    if n_unique > 9:
-        return ["continue"]
-
     if dataset[attribute].dtype == "object":
         return ["discret", "nominal"]
+
+    if n_unique > 9:
+        return ["continue"]
 
     return ["discret", "ordinal"]
 
 
 if __name__ == "__main__":
-    # print(df.columns)
-    # encoded_attrition = encode(df["Attrition"])
-    # encoded_business_travel = encode(df["BusinessTravel"])
-
-    # print(round(chi2(encoded_attrition, encoded_business_travel), 2))
-
-    # with open("resume.csv", "w") as file:
-    #     file.write("attribut, mean, q0, q1, q2, q3, q4, symmetry, iqr, modes, n_outliers, n_unique, n_missing\n")
-    #     for column in df.columns:
-    #         if column in ["EmployeeNumber"]:
-    #             continue
-
-    #         modes = find_modes(df[column])
-
-    #         info = {
-    #             "mean": "N/A",
-    #             "q0": "N/A", "q1": "N/A", "q2": "N/A", "q3": "N/A", "q4": "N/A",
-    #             "symmetry": "N/A",
-    #             "iqr": "N/A",
-    #             "modes": " & ".join([str(mode) for mode in modes]),
-    #             "n_outliers": 0,
-    #             "n_unique": 0,
-    #             "n_missing": 0
-    #         }
-
-    #         if attribute_type(df[column]) == "continue":
-    #             mean = find_mean(df[column])
-
-    #             # compute quartiles (q0 -> q4) & IQR
-    #             q0, q1, q2, q3, q4 = quartiles(df[column])
-    #             iqr = q3 - q1
-
-    #             # compute symmetry
-    #             symmetry_dictionary = {0: "symmetric",
-    #                                    1: "symmetric positive", -1: "symmetric negative", -2: "non-symmetric"}
-    #             column_symmetry_value = symmetry(df[column])
-    #             column_symmetry = symmetry_dictionary[column_symmetry_value]
-
-    #             # find outliers
-    #             outliers_indicies = find_outliers(df[column])
-    #             n_outliers = len(outliers_indicies)
-
-    #             # find n_unique
-    #             n_unique = df[column].nunique()
-
-    #             # find n_missing
-    #             n_missing = df[column].isna().sum()
-
-    #             info = {
-    #                 "mean": mean,
-    #                 "q0": q0, "q1": q1, "q2": q2, "q3": q3, "q4": q4,
-    #                 "symmetry": column_symmetry,
-    #                 "iqr": iqr,
-    #                 "modes": " & ".join([str(mode) for mode in modes]),
-    #                 "n_outliers": n_outliers,
-    #                 "n_unique": n_unique,
-    #                 "n_missing": n_missing
-    #             }
-
-    #         file.write(
-    #             f"{column}, {info['mean']}, {info['q0']}, {info['q1']}, {info['q2']}, {info['q3']}, {info['q4']}, {info['symmetry']}, {info['iqr']}, {info['modes']}, {info['n_outliers']}, {info['n_unique']}, {info['n_missing']}\n")
-    # print(f"done with column {column}")
-
-    # with open("correlation.csv", "w") as file:
-    #     file.write("column_1, column_2, type, correlation, result\n")
-    #     for column_1 in df.columns:
-    #         for column_2 in df.columns:
-    #             if column_1 == column_2:
-    #                 continue
-
-    #             # continue continue
-    #             if attribute_type(df[column_1]) == "continue" and attribute_type(df[column_2]) == "continue":
-    #                 # compute pearson correlation coefficient
-    #                 correlation = round(pearson_correlation(df[column_1], df[column_2]), 2)
-
-    #                 result = "not-correlated"
-    #                 if abs(correlation) > 0.5:
-    #                     result = "correlated"
-
-    #                 file.write(f"{column_1}, {column_2}, continue, {correlation}, {result}\n")
-    #             # discret discret
-    #             if attribute_type(df[column_1]) == "discret" and attribute_type(df[column_2]) == "discret":
-    #                 # compute chi² correlation coefficient
-    #                 encoded_column_1 = encode(df[column_1])
-    #                 encoded_column_2 = encode(df[column_2])
-
-    #                 correlation = round(chi2(encoded_column_1, encoded_column_2), 2)
-
-    #                 result = "not-correlated"
-    #                 if abs(correlation) > 1_000:
-    #                     result = "correlated"
-
-    #                 file.write(f"{column_1}, {column_2}, discret, {correlation}, {result}\n")
-
-    print(df["EnvironmentSatisfaction"].nunique())
-    print(attribute_type(df["EnvironmentSatisfaction"]))
+    pass
