@@ -7,7 +7,8 @@ from routes.apriori import apriori_blueprint
 
 import settings
 
-settings.init()
+settings.init_dev()
+# settings.init()
 
 app = Flask(__name__)
 
