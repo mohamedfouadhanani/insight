@@ -17,7 +17,7 @@ def init_dev():
     global development
     development = True
     
-    with open("dataset2.xlsx", "rb") as file:
+    with open("dataset.xlsx", "rb") as file:
         file_content = file.read()
 
     df = pd.read_excel(file_content)

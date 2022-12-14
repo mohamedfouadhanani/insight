@@ -4,6 +4,7 @@ from routes.dataset import dataset_blueprint
 from routes.analysis import analysis_blueprint
 from routes.pretreatment import pretreatment_blueprint
 from routes.apriori import apriori_blueprint
+from routes.prediction import prediction_blueprint
 
 import settings
 
@@ -17,6 +18,7 @@ app.register_blueprint(dataset_blueprint, url_prefix="/dataset")
 app.register_blueprint(analysis_blueprint, url_prefix="/analysis")
 app.register_blueprint(pretreatment_blueprint, url_prefix="/pretreatment")
 app.register_blueprint(apriori_blueprint, url_prefix="/apriori")
+app.register_blueprint(prediction_blueprint, url_prefix="/prediction")
 
 
 @app.route("/", methods=["GET"])
