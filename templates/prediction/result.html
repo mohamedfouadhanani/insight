@@ -1,0 +1,10 @@
+{% extends 'layout.html' %} %} {% block main %}
+<main class="w-3/4 mx-auto my-4">
+	<h1 class="text-2xl font-bold capitalize">prediction</h1>
+	<h2 class="text-gray-500 text-lg capitalize">
+		the system thinks that the employee
+		<span class="font-bold"> {{ "will" if prediction else "will not" }} </span>
+		quit their job
+	</h2>
+</main>
+{% endblock %}

@@ -2,7 +2,7 @@
 <section class="w-2/3 mx-auto my-8 space-y-6">
 	<section>
 		<h1 class="font-bold text-2xl capitalize">prediction</h1>
-		<form action="/prediction/" method="post" class="space-y-4">
+		<form action="/prediction/" method="post" class="space-y-4" target="_blank">
 			<div class="flex-col space-y-2 capitalize">
 				<label class="block font-semibold" for="prediction_algorithm">
 					prediction algorithm
@@ -11,7 +11,7 @@
 					required
 					name="prediction_algorithm"
 					id="prediction_algorithm"
-					class="block w-full border-2 border-black p-2 rounded-select"
+					class="block w-full border-2 border-black p-2 rounded"
 				>
 					{% for variable_name, name in prediction_algorithms.items() %}
 					<option value="{{ variable_name }}" class="capitalize">
@@ -28,20 +28,20 @@
 				{% if dtype != "object" %}
 				<input
 					required
-					class="w-full border-2 border-black p-2 rounded-select"
+					class="w-full border-2 border-black p-2 rounded"
 					type="number"
 					name="{{ column }}"
 					id="{{ column }}"
-					value="420"
+					value="{{ sample[column] }}"
 				/>
 				{% else %}
 				<input
 					required
-					class="w-full border-2 border-black p-2 rounded-select"
+					class="w-full border-2 border-black p-2 rounded"
 					type="text"
 					name="{{ column }}"
 					id="{{ column }}"
-					value="hello you"
+					value="{{ sample[column] }}"
 				/>
 				{% endif %}
 			</div>

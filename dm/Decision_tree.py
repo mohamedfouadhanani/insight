@@ -1,6 +1,8 @@
 import numpy as np
 from collections import Counter
 
+import dill
+
 class Node:
     def __init__(self, feature=None, threshold=None, left=None, right=None,*,value=None):
         self.feature = feature
@@ -27,6 +29,9 @@ class DecisionTree:
     def _grow_tree(self, X, y, depth=0):
         n_samples, n_feats = X.shape
         n_labels = len(np.unique(y))
+
+        if n_labels == 0:
+            return Node(value=-1)
 
         # check the stopping condition
         if (depth>=self.max_depth or n_labels==1 or n_samples<self.min_samples_split):
@@ -109,7 +114,11 @@ class DecisionTree:
     def _traverse_tree(self, x, node):
         if node.is_leaf_node():
             return node.value
-
+        
+        # print("-" * 100)
+        # print(x[node.feature], type(x[node.feature]))
+        # print(node.threshold, type(node.threshold))
+        
         if x[node.feature] <= node.threshold:
             return self._traverse_tree(x, node.left)
         return self._traverse_tree(x, node.right)
@@ -119,6 +128,32 @@ import pandas as pd
 
 def accuracy(y_test, y_pred):
     return np.sum(y_test == y_pred) / len(y_test)
+
+def get_model():
+    with open("Dataset1_pretraitement_complet.xlsx", "rb") as file:
+        file_content = file.read()
+    
+    df = pd.read_excel(file_content)
+    
+    # get class attribut
+    y = df["Attrition"].to_numpy()
+    # print("shape of Y : ", y.shape)
+
+    df = df.drop("Attrition", axis=1)
+    df = df.drop("Unnamed: 0", axis=1)
+
+    # X with 29 features
+    X = df.to_numpy()
+    # print("shape of X : ", X.shape)
+
+    # split the dataset into training set (80%) and testing set (20%)  
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+    Dt = DecisionTree(max_depth=10)
+    
+    Dt.fit(X_train, y_train)
+    
+    return Dt
 
 if __name__ == "__main__":
     
@@ -146,9 +181,9 @@ if __name__ == "__main__":
     
     Dt.fit(X_train, y_train)
 
+    print("X_test[0]")
+    print(X_test[0])
     predictions = Dt.predict(X_test)
 
     acc = accuracy(y_test, predictions)
     print("Accuracy of DT : ", acc)
-
-

@@ -1,6 +1,14 @@
-from Decision_tree import DecisionTree
+import sys
+import os
+
+# sys.path.append(os.getcwd())
+
+from dm.Decision_tree import DecisionTree
+
 import numpy as np
 from collections import Counter
+
+import dill
 
 class RandomForest:
     def __init__(self, n_trees=10, max_depth=10, min_samples_split=2, n_feature=None):
@@ -48,6 +56,28 @@ def accuracy(y_true, y_pred):
     accuracy = np.sum(y_true == y_pred) / len(y_true)
     return accuracy
 
+def get_model():
+    with open("Dataset1_pretraitement_complet.xlsx", "rb") as file:
+        file_content = file.read()
+    
+    # get the class
+    df = pd.read_excel(file_content)
+    y = df["Attrition"].to_numpy()
+
+    df = df.drop("Attrition", axis=1)
+    df = df.drop("Unnamed: 0", axis=1)
+    
+    X = df.to_numpy()
+
+    # spliting data : train (80%), test (20%)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+
+    Rf = RandomForest(n_trees=20)
+    Rf.fit(X_train, y_train)
+
+    return Rf
+
 if __name__ == "__main__":
     
     # import the dataset
@@ -70,6 +100,8 @@ if __name__ == "__main__":
     # Rf = RandomForest(n_trees=20)
     Rf = RandomForest(n_trees=15)
     Rf.fit(X_train, y_train)
+    print("done fitting...")
+    
     predictions = Rf.predict(X_test)
 
     acc =  accuracy(y_test, predictions)
