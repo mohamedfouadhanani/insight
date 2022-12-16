@@ -12,6 +12,7 @@ prediction_blueprint = Blueprint("prediction", __name__)
 def index_get():
     prediction_algorithms = {
         "decision_tree": "decision tree",
+        "decision_tree_with_id3": "decision tree with id3",
         "random_forest": "random forest",
     }
 
@@ -31,7 +32,8 @@ def index_get():
 def index_post():
     prediction_algorithms = {
         "decision_tree": settings.decision_tree_model,
-        "random_forest": settings.random_forest_model
+        "random_forest": settings.random_forest_model,
+        "decision_tree_with_id3": settings.decision_tree_with_id3_model
     }
 
     chosen_prediction_algorithm = request.form["prediction_algorithm"]
@@ -75,6 +77,7 @@ def index_post():
 def tests_get(row):
     prediction_algorithms = {
         "decision_tree": "decision tree",
+        "decision_tree_with_id3": "decision tree with id3",
         "random_forest": "random forest",
     }
 

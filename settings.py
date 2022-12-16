@@ -5,8 +5,15 @@ import dill
 
 from dm import Decision_tree
 from dm import Random_forest
+from dm import DT_with_ID3
 
 def init():
+    global decision_tree_with_id3_model
+    decision_tree_with_id3_model = None
+    with open("decision_tree_with_id3.model", "rb") as dill_file:
+        decision_tree_with_id3_model = dill.load(dill_file)
+    print("done saving decision tree with ID3 model...")
+
     global decision_tree_model
     with open("decision_tree.model", "rb") as dill_file:
         decision_tree_model = dill.load(dill_file)
@@ -15,7 +22,7 @@ def init():
     global random_forest_model
     with open("random_forest.model", "rb") as dill_file:
         random_forest_model = dill.load(dill_file)
-    print("done getting decision tree model...")
+    print("done getting random forest model...")
     
     global development
     development = False
@@ -28,6 +35,12 @@ def init():
 
 
 def init_dev():
+    global decision_tree_with_id3_model
+    decision_tree_with_id3_model = None
+    with open("decision_tree_with_id3.model", "rb") as dill_file:
+        decision_tree_with_id3_model = dill.load(dill_file)
+    print("done saving decision tree with ID3 model...")
+
     global decision_tree_model
     with open("decision_tree.model", "rb") as dill_file:
         decision_tree_model = dill.load(dill_file)
@@ -71,6 +84,11 @@ if __name__ == "__main__":
     #     dill.dump(random_forest_model, dill_file)
     # print("done saving decision tree model...")
 
+    # decision_tree_with_id3_model = DT_with_ID3.get_model()
+    # with open("decision_tree_with_id3.model", "wb") as dill_file:
+    #     dill.dump(decision_tree_with_id3_model, dill_file)
+    # print("done saving decision tree model...")
+
     # decision_tree_model = None
     # with open("decision_tree.model", "rb") as dill_file:
     #     decision_tree_model = dill.load(dill_file)
@@ -80,5 +98,10 @@ if __name__ == "__main__":
     # with open("random_forest.model", "rb") as dill_file:
     #     random_forest_model = dill.load(dill_file)
     # print("done getting random forest model...")
+
+    # decision_tree_with_id3_model = None
+    # with open("decision_tree_with_id3.model", "rb") as dill_file:
+    #     decision_tree_with_id3_model = dill.load(dill_file)
+    # print("done saving decision tree model...")
 
     init_dev()
