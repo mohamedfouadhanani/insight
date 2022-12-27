@@ -40,7 +40,7 @@ class DecisionTree:
         feat_idxs = np.random.choice(n_feats, self.n_features, replace=False)
 
         # find the best split
-        best_feature, best_thresh = self._best_split(X, y, feat_idxs)
+        best_feature, _ = self._best_split(X, y, feat_idxs)
 
         # create child nodes
         children_idxs = self._split(X[:, best_feature])
@@ -90,7 +90,6 @@ class DecisionTree:
         for i in range(len(n_child)):    
             child_entropy = child_entropy + (n_child[i]/n) * e_child[i]
         
-        # calculate the IG
         information_gain = parent_entropy - child_entropy
         return information_gain
 

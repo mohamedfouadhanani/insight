@@ -1,0 +1,4 @@
+cluster to cluster function, intra-clusters distance (number of clusters is 2), inter-clusters mean distance (number of clusters is 2), clustering time
+minimal_distance, 412377, 2.5, 125
+maximal_distance, 591487, 15.0, 32
+mean_distance, 412377, 5.967687074829932, 52

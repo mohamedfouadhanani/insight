@@ -1,0 +1,58 @@
+{% extends 'layout.html' %} %} {% block main %}
+<section class="w-5/6 mx-auto my-8 space-y-4">
+	<h1 class="font-bold text-2xl">DBSCAN Clustering</h1>
+	<section class="space-y-2">
+		<h1 class="font-bold capitalize text-xl">clusters</h1>
+		<section>
+			{% for cluster in clusters %}
+			<section>
+				<h1 class="font-bold capitalize">cluster with id {{ cluster.id }}</h1>
+				<section class="overflow-y-scroll remove_scrollbar">
+					<table>
+						<thead>
+							{% for column in columns: %}
+							<th class="capitalize border-2 border-black p-2">
+								{{ column.strip() }}
+							</th>
+							{% endfor %}
+						</thead>
+						<tbody>
+							{% for point in cluster.points %}
+							<tr>
+								{% for value in point.sample %}
+								<td class="border-2 border-black p-2">{{ value }}</td>
+								{% endfor %}
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</section>
+			</section>
+			{% endfor %}
+		</section>
+	</section>
+	<section class="space-y-1">
+		<h1 class="font-bold capitalize text-xl">outliers</h1>
+		<section class="overflow-y-scroll remove_scrollbar">
+			<table>
+				<thead>
+					{% for column in columns: %}
+					<th class="capitalize border-2 border-black p-2">
+						{{ column.strip() }}
+					</th>
+					{% endfor %}
+				</thead>
+				<tbody>
+					{% for point in outliers %}
+					<tr>
+						{% for value in point.sample %}
+						<td class="border-2 border-black p-2">{{ value }}</td>
+						{% endfor %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</section>
+	</section>
+</section>
+{% endblock %}

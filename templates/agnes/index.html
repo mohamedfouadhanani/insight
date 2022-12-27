@@ -1,0 +1,33 @@
+{% extends 'layout.html' %} %} {% block main %}
+<section class="w-2/3 mx-auto my-8">
+	<section class="space-y-2">
+		<h1 class="font-bold text-2xl uppercase">agnes</h1>
+		<form target="_blank" action="/agnes/" method="post" class="space-y-4">
+			{% for variable_name, name_value_dict in params.items() %}
+			<div class="flex-col space-y-2 capitalize">
+				<label class="block font-semibold" for="{{ variable_name }}">
+					{{ name_value_dict['name'] }}
+				</label>
+				<select
+					name="{{ variable_name }}"
+					id="{{ variable_name }}"
+					class="block w-full border-2 border-black p-2 rounded-select"
+				>
+					{% for agg_function_varname, agg_function_name in
+					name_value_dict['values'].items() %}
+					<option value="{{ agg_function_varname }}">
+						{{ agg_function_name }}
+					</option>
+					{% endfor %}
+				</select>
+			</div>
+			{% endfor %}
+			<input
+				type="submit"
+				value="ok"
+				class="uppercase font-bold w-full p-2 bg-black text-white hover:bg-gray-900 rounded-md cursor-pointer"
+			/>
+		</form>
+	</section>
+</section>
+{% endblock %}

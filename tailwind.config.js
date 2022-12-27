@@ -7,3 +7,4 @@ module.exports = {
 	plugins: [],
 };
 // npx tailwindcss -i ./static/stylesheets/intw.css -o ./static/stylesheets/outtw.css --watch
+// npx tailwindcss -i ./static/stylesheets/intw.css -o ./static/stylesheets/outtw.css
