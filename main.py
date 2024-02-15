@@ -14,8 +14,8 @@ from routes.agnes import agnes_blueprint
 
 import settings
 
-settings.init_dev()
-# settings.init()
+# settings.init_dev()
+settings.init()
 
 app = Flask(__name__)
 
@@ -50,7 +50,7 @@ def save():
 
 @app.route("/reset", methods=["GET"])
 def reset():
-    settings.init_dev()
+    settings.init()
 
     return redirect(request.referrer)
 

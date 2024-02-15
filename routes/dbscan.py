@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect
 import pandas as pd
 
 from dm.dbscan.dbscan import DBSCAN
-from dm.dbscan.distances import similarity
+from dm.dbscan.distances import difference
 
 import settings
 
@@ -40,7 +40,7 @@ def post_dbscan_params():
     epsilon = float(request.form["epsilon"])
 
     # create an instance of DBSCAN
-    algorithm = DBSCAN(minimum_points=minimum_points, epsilon=epsilon, p2p_distance_function=similarity)
+    algorithm = DBSCAN(minimum_points=minimum_points, epsilon=epsilon, p2p_distance_function=difference)
 
     # transform the dataset to list of tuples
     df = pd.read_excel("Dataset1_pretraitement_complet.xlsx")

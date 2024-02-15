@@ -1,10 +1,10 @@
 import numpy as np
 
-def similarity(point_1, point_2):  
+def difference(point_1, point_2):  
     # result = sum([x_1 == x_2 for x_1, x_2 in zip(point_1, point_2)])
     # result = np.random.randint(0, 10)
     # result = 1
-    result = np.sum(np.array(point_1) == np.array(point_2))
+    result = np.sum(np.array(point_1) != np.array(point_2))
     
     return result
 

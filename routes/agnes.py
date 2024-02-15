@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect
 import pandas as pd
 
 from dm.agnes.agnes import Agnes
-from dm.agnes.distances import similarity, minimal_distance, maximal_distance, mean_distance
+from dm.agnes.distances import difference, minimal_distance, maximal_distance, mean_distance
 
 import settings
 
@@ -47,7 +47,7 @@ def post_agnes_params():
     agglomerative_function = request.form["agglomerative_function"]
 
     # create an instance of agnes
-    algorithm = Agnes(c2c_distance_function=agglomerative_functions[agglomerative_function](similarity))
+    algorithm = Agnes(c2c_distance_function=agglomerative_functions[agglomerative_function](difference))
 
     # transform the dataset to list of tuples
     df = pd.read_excel("Dataset1_pretraitement_complet.xlsx")

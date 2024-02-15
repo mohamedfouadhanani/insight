@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 from dm.agnes.agnes import Agnes
-from dm.agnes.distances import minimal_distance, maximal_distance, mean_distance, similarity
+from dm.agnes.distances import minimal_distance, maximal_distance, mean_distance, difference
 from dm.agnes.metrics import intraclusters_distance, interclusters_distance
 from dm.agnes.configuration import Configuration
 
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         print("-"* 100)
         print(f"combination {index}:")
 
-        algorithm = Agnes(c2c_distance_function=c2c_distance_functions[c2c_distance_function](distance_function=similarity))
+        algorithm = Agnes(c2c_distance_function=c2c_distance_functions[c2c_distance_function](distance_function=difference))
         print(f"\tc2c distance function = {c2c_distance_function}\n")
         
         start = time()
@@ -80,8 +80,8 @@ if __name__ == "__main__":
 
         # measures - where number of clusters is 2
         clusters = history[2]
-        measure_1 = intraclusters_distance(clusters, similarity)
-        measure_2 = interclusters_distance(clusters, c2c_distance_functions[c2c_distance_function](distance_function=similarity))
+        measure_1 = intraclusters_distance(clusters, difference)
+        measure_2 = interclusters_distance(clusters, c2c_distance_functions[c2c_distance_function](distance_function=difference))
         measure_3 = duration
         
         # print("*" * 100)

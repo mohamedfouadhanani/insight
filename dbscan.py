@@ -5,7 +5,7 @@ os.environ["PYTHONDONTWRITEBYTECODE"] = "abc"
 
 import pandas as pd
 
-from dm.dbscan.distances import similarity
+from dm.dbscan.distances import difference
 
 from dm.dbscan.dbscan import DBSCAN
 
@@ -21,13 +21,13 @@ if __name__ == "__main__":
 
     configuration = Configuration(
         dataset=dataset, 
-        p2p_distance_functions=["similarity"],
-        minimum_points=[1, 2, 3, 4, 5],
-        epsilons=[1, 2, 3]
+        p2p_distance_functions=["difference"],
+        minimum_points=[2, 5, 10, 20, 25],
+        epsilons=[15, 20]
     )
     
     p2p_distance_functions = {
-        "similarity": similarity
+        "difference": difference
     }
 
     possible_combinations = configuration.possible_combinations()
@@ -35,8 +35,8 @@ if __name__ == "__main__":
     n_possible_combinations = len(possible_combinations)
     print(f"n_possible_combinations = {n_possible_combinations}")
 
-    with open("dbscan_evaluation.csv", "a") as file:
-        file.write("epsilon, minimum points, n_cluster, intra-clusters distance, inter-clusters mean distance\n")
+    # with open("dbscan_evaluation.csv", "w") as file:
+    #     file.write("epsilon, minimum points, n_cluster, intra-clusters distance, inter-clusters mean distance\n")
     
     for index, (dataset, p2p_distance_function, minimum_points, epsilon) in enumerate(possible_combinations, start=1):
         print("-"* 100)
